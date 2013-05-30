@@ -1,4 +1,4 @@
 gobots
 ======
 
-this a prototype for a got fighting game written in Go1.1
+this a prototype for a bot fighting game written in Go1.1

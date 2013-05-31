@@ -7,63 +7,8 @@ import (
 
 func main() {
 
-    armors := []gobots.Armor{
-        gobots.Armor{
-            Name: "Base armor",
-            Resistance: 10,
-            Damage: 0,
-        },
-        gobots.Armor{
-            Name: "Advanced armor",
-            Resistance: 100,
-            Damage: 0,
-        },
-    }
-
-    moves := []*gobots.Move{
-        &gobots.Move{
-            Name: "Attack",
-            Type: "Attack",
-            HitDamage: 5,
-            Protection: 0,
-            TurnsToRecharge: 0,
-            MovesByTurn: 1,
-        },
-        &gobots.Move{
-            Name: "Attack2",
-            Type: "Attack",
-            HitDamage: 2,
-            Protection: 0,
-            TurnsToRecharge: 0,
-            MovesByTurn: 2,
-        },
-    }
-
-    bots := []*gobots.Bot{
-        &gobots.Bot{
-            Name: "bot1",
-            Energy: 50,
-            MountedArmor: armors[0],
-            Strength: 10,
-            Defense: 2,
-            Speed: 5,
-            RestEnergy: 1,
-            Moves: moves,
-        },
-        &gobots.Bot{
-            Name: "bot2",
-            Energy: 30,
-            MountedArmor: armors[1],
-            Strength: 20,
-            Defense: 5,
-            Speed: 1,
-            RestEnergy: 3,
-            Moves: moves,
-        },
-    }
-
     var chronicle = make(chan GameChronicle)
-    f := gobots.NewFight(bots[0], bots[1], 1, 10)
+    f := gobots.NewFight(Bots[0], Bots[1], 1, 10)
     go game_loop(f, chronicle)
 
     for {
@@ -74,6 +19,7 @@ func main() {
         }
     }
 
+    close(chronicle)
     panic("show me the leaks")
 }
 

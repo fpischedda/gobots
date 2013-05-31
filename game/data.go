@@ -43,7 +43,7 @@ var Moves = []*gobots.Move{
     &gobots.Move{
         Name: "Attack",
         Type: "Attack",
-        HitDamage: 5,
+        HitDamage: 40,
         Protection: 0,
         TurnsToRecharge: 0,
         MovesByTurn: 1,
@@ -51,7 +51,7 @@ var Moves = []*gobots.Move{
     &gobots.Move{
         Name: "Attack2",
         Type: "Attack",
-        HitDamage: 2,
+        HitDamage: 20,
         Protection: 0,
         TurnsToRecharge: 0,
         MovesByTurn: 2,

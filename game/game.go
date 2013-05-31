@@ -30,20 +30,22 @@ func game_loop(f *gobots.Fight, chronicle chan GameChronicle) {
     var err error
     for {
 
+        damage := f.NextBot.Energy
         status := f.PlayTurn()
+        damage = damage - f.NextBot.Energy
 
         if status <= 0 {
-            chronicle <- NewChronicle(f, "current bot wins")
+            chronicle <- NewChronicle(f, "current bot wins", damage)
             break;
         } else {
             _, err = f.NextTurn()
 
             if err != nil {
-                chronicle <- NewChronicle(f, err.Error())
+                chronicle <- NewChronicle(f, err.Error(), damage)
                 break;
             }
 
-            chronicle <- NewChronicle(f, "running")
+            chronicle <- NewChronicle(f, "running", damage)
         }
     }
 }
@@ -51,6 +53,7 @@ func game_loop(f *gobots.Fight, chronicle chan GameChronicle) {
 type GameChronicle struct {
 
     Action string
+    ActionDamage int
     MatchStatus string
     CurrentBotInfo BotInfo
     NextBotInfo BotInfo
@@ -65,7 +68,7 @@ type BotInfo struct {
     ArmorStatus int
 }
 
-func NewChronicle(f *gobots.Fight, status string) GameChronicle {
+func NewChronicle(f *gobots.Fight, status string, damage int) GameChronicle {
 
     action := f.CurrentBotMove()
 
@@ -83,6 +86,7 @@ func NewChronicle(f *gobots.Fight, status string) GameChronicle {
 
     return GameChronicle{
         Action: action.Name,
+        ActionDamage: damage,
         MatchStatus: status,
         CurrentBotInfo: c_bot,
         NextBotInfo: n_bot,
@@ -98,7 +102,7 @@ func (c *GameChronicle) Print() {
         "Energy ", c.CurrentBotInfo.Energy,
         "Armor ", c.CurrentBotInfo.ArmorStatus)
 
-    fmt.Println("Action ", c.Action)
+    fmt.Println("Action ", c.Action, "Damage", c.ActionDamage)
 
     fmt.Println("Other Bot ", c.NextBotInfo.Name,
         "Energy ", c.NextBotInfo.Energy,

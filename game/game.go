@@ -8,7 +8,9 @@ import (
 func main() {
 
     var chronicle = make(chan GameChronicle)
-    f := gobots.NewFight(Bots[0], Bots[1], 1, 10)
+    bot1 := RandomizeBot(Armors, Moves, "ciccio bot")
+    bot2 := RandomizeBot(Armors, Moves, "pinottobot")
+    f := gobots.NewFight(bot1, bot2, 2, 10)
     go game_loop(f, chronicle)
 
     for {

@@ -42,7 +42,11 @@ func (f *Fight) PlayTurn() int {
 
     move := f.CurrentBotMove()
 
-    return f.NextBot.Hit(move)
+    last_res := 0
+    for i := 0; i < move.MovesByTurn; i++ {
+        last_res = f.NextBot.Hit(move)
+    }
+    return last_res
 }
 
 func (f *Fight) NextTurn() (*Bot, error) {

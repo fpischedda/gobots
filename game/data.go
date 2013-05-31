@@ -1,8 +1,30 @@
 package main
 
 import(
+    "math/rand"
     gobots "github.com/fpischedda/gobots"
 )
+
+func RandomizeBot(armors []gobots.Armor, moves []*gobots.Move,
+    name string) *gobots.Bot {
+
+    armor := Armors[rand.Intn(len(Armors)-1)]
+    energy := 30 + rand.Intn(10)
+    strength := 10 + rand.Intn(5)
+    defense := 10 + rand.Intn(10)
+    speed := 1 + rand.Intn(5)
+    rest_energy := 5 + rand.Intn(5)
+    return &gobots.Bot{
+        Name: name,
+        Energy: energy,
+        MountedArmor: armor,
+        Strength: strength,
+        Defense: defense,
+        Speed: speed,
+        RestEnergy: rest_energy,
+        Moves: moves,
+    }
+}
 
 var Armors = []gobots.Armor{
     gobots.Armor{
@@ -33,28 +55,5 @@ var Moves = []*gobots.Move{
         Protection: 0,
         TurnsToRecharge: 0,
         MovesByTurn: 2,
-    },
-}
-
-var Bots = []*gobots.Bot{
-    &gobots.Bot{
-        Name: "bot1",
-        Energy: 50,
-        MountedArmor: Armors[0],
-        Strength: 10,
-        Defense: 2,
-        Speed: 5,
-        RestEnergy: 1,
-        Moves: Moves,
-    },
-    &gobots.Bot{
-        Name: "bot2",
-        Energy: 30,
-        MountedArmor: Armors[1],
-        Strength: 20,
-        Defense: 5,
-        Speed: 1,
-        RestEnergy: 3,
-        Moves: Moves,
     },
 }

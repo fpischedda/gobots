@@ -15,15 +15,18 @@ type Bot struct{
 func (b *Bot) Rest() {
 
     b.Energy += b.RestEnergy
+    b.MountedArmor.Repair(50)
 }
 
-func (b *Bot) Hit(move *Move) {
+func (b *Bot) Hit(move *Move) int {
 
     damage := b.Defense - b.MountedArmor.Hit(move)
 
     if damage < 0 {
         b.Energy += damage
     }
+
+    return b.Energy
 }
 
 func (b *Bot) CurrentMove() *Move {
@@ -36,6 +39,16 @@ type Armor struct {
     Name string
     Resistance int
     Damage int
+}
+
+func (a *Armor) Repair(repair_perc int) {
+
+    a.Damage = a.Resistance - a.Resistance*repair_perc / 100
+}
+
+func (a *Armor) Status() int {
+
+    return (a.Resistance - a.Damage) * 100 / a.Resistance
 }
 
 func (a *Armor) Hit(move *Move) int {

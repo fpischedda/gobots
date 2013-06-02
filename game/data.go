@@ -13,15 +13,16 @@ func RandomizeBot(armors []gobots.Armor, moves []*gobots.Move,
     strength := 10 + rand.Intn(5)
     defense := 10 + rand.Intn(10)
     speed := 1 + rand.Intn(5)
-    rest_energy := 5 + rand.Intn(5)
+    rest_perc := 30 + rand.Intn(30)
     return &gobots.Bot{
         Name: name,
+        MaxEnergy: energy,
         Energy: energy,
         MountedArmor: armor,
         Strength: strength,
         Defense: defense,
         Speed: speed,
-        RestEnergy: rest_energy,
+        RestPerc: rest_perc,
         Moves: moves,
     }
 }

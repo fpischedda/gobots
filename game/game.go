@@ -11,16 +11,17 @@ func main() {
     bot1 := RandomizeBot(Armors, Moves, "ciccio bot")
     bot2 := RandomizeBot(Armors, Moves, "pinottobot")
     f := gobots.NewFight(bot1, bot2, 2, 10)
+    c := NewChronicle(f, "starting match", 0)
+    fmt.Println("*** STARTING FIGHT ***")
+    c.Print()
+    
     go game_loop(f, chronicle)
 
-    for {
-        c := <-chronicle
+    for c = <-chronicle; c.MatchStatus == "running"; c = <-chronicle{
         c.Print()
-        if c.MatchStatus != "running" {
-            break;
-        }
     }
 
+    c.Print()
     close(chronicle)
     panic("show me the leaks")
 }

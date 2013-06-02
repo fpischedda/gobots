@@ -1,20 +1,35 @@
 package gobots
 
+func min(a, b int) int {
+    if a < b {
+        return a
+    }
+    return b
+}
+
+func max(a, b int) int {
+    if a > b {
+        return a
+    }
+    return b
+}
+
 type Bot struct{
 
     Name string
+    MaxEnergy int
     Energy int
     MountedArmor Armor
     Strength int
     Defense int
     Speed int
-    RestEnergy int
+    RestPerc int
     Moves []*Move
 }
 
 func (b *Bot) Rest() {
 
-    b.Energy += b.RestEnergy
+    b.Energy = min(b.MaxEnergy, b.Energy + b.MaxEnergy*b.RestPerc/100)
     b.MountedArmor.Repair(50)
 }
 
@@ -43,7 +58,7 @@ type Armor struct {
 
 func (a *Armor) Repair(repair_perc int) {
 
-    a.Damage = a.Resistance - a.Resistance*repair_perc / 100
+    a.Damage = max(0, a.Damage - a.Damage*repair_perc / 100)
 }
 
 func (a *Armor) Status() int {

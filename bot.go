@@ -21,6 +21,7 @@ type Bot struct{
     Energy int
     MountedArmor Armor
     Strength int
+    MaxDefense int
     Defense int
     Speed int
     RestPerc int
@@ -30,14 +31,20 @@ type Bot struct{
 func (b *Bot) Rest() {
 
     b.Energy = min(b.MaxEnergy, b.Energy + b.MaxEnergy*b.RestPerc/100)
+    b.Defense = min(b.MaxDefense, b.Defense + b.MaxDefense*b.RestPerc/100)
     b.MountedArmor.Repair(50)
 }
 
+/*
+    every hit the bot defense decrease by half the damage
+    that passes through the armor
+*/
 func (b *Bot) Hit(move *Move) int {
 
     damage := b.Defense - b.MountedArmor.Hit(move)
 
     if damage < 0 {
+        b.Defense = max(0, b.Defense + damage/2)
         b.Energy += damage
     }
 
@@ -58,7 +65,7 @@ type Armor struct {
 
 func (a *Armor) Repair(repair_perc int) {
 
-    a.Damage = max(0, a.Damage - a.Damage*repair_perc / 100)
+    a.Damage = max(0, a.Damage - a.Resistance*repair_perc / 100)
 }
 
 func (a *Armor) Status() int {

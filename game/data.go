@@ -11,7 +11,7 @@ func RandomizeBot(armors []gobots.Armor, moves []*gobots.Move,
     armor := Armors[rand.Intn(len(Armors)-1)]
     energy := 30 + rand.Intn(10)
     strength := 10 + rand.Intn(5)
-    defense := 10 + rand.Intn(10)
+    defense := 5 + rand.Intn(5)
     speed := 1 + rand.Intn(5)
     rest_perc := 30 + rand.Intn(30)
     return &gobots.Bot{
@@ -20,6 +20,7 @@ func RandomizeBot(armors []gobots.Armor, moves []*gobots.Move,
         Energy: energy,
         MountedArmor: armor,
         Strength: strength,
+        MaxDefense: defense,
         Defense: defense,
         Speed: speed,
         RestPerc: rest_perc,
@@ -35,7 +36,7 @@ var Armors = []gobots.Armor{
     },
     gobots.Armor{
         Name: "Advanced armor",
-        Resistance: 100,
+        Resistance: 30,
         Damage: 0,
     },
 }
@@ -44,7 +45,7 @@ var Moves = []*gobots.Move{
     &gobots.Move{
         Name: "Attack",
         Type: "Attack",
-        HitDamage: 40,
+        HitDamage: 12,
         Protection: 0,
         TurnsToRecharge: 0,
         MovesByTurn: 1,
@@ -52,7 +53,7 @@ var Moves = []*gobots.Move{
     &gobots.Move{
         Name: "Attack2",
         Type: "Attack",
-        HitDamage: 20,
+        HitDamage: 14,
         Protection: 0,
         TurnsToRecharge: 0,
         MovesByTurn: 2,

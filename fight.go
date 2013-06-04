@@ -55,6 +55,7 @@ func (f *Fight) NextTurn() (*Bot, error) {
     if f.Turn >= f.MaxRoundTurns {
 
         f.Round ++
+        f.Turn = 0
 
         if f.Round >= f.MaxRounds {
 

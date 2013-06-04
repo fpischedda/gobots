@@ -69,6 +69,13 @@ type BotInfo struct {
     ArmorStatus int
 }
 
+func (b *BotInfo) Print() {
+
+    fmt.Println("Bot", b.Name,
+        "Energy", b.Energy,
+        "Armor efficency", b.ArmorStatus, "%")
+}
+
 func NewChronicle(f *gobots.Fight, status string, damage int) GameChronicle {
 
     action := f.CurrentBotMove()
@@ -98,16 +105,14 @@ func NewChronicle(f *gobots.Fight, status string, damage int) GameChronicle {
 
 func (c *GameChronicle) Print() {
 
-    fmt.Println("Round: ", c.Round, "Turn", c.Turn)
-    fmt.Println("Active Bot ", c.CurrentBotInfo.Name,
-        "Energy ", c.CurrentBotInfo.Energy,
-        "Armor ", c.CurrentBotInfo.ArmorStatus)
+    fmt.Println("Round:", c.Round, "Turn", c.Turn)
+    fmt.Println("Active Bot")
+    c.CurrentBotInfo.Print()
 
-    fmt.Println("Action ", c.Action, "Damage", c.ActionDamage)
+    fmt.Println("Action", c.Action, "Damage", c.ActionDamage)
 
-    fmt.Println("Other Bot ", c.NextBotInfo.Name,
-        "Energy ", c.NextBotInfo.Energy,
-        "Armor ", c.NextBotInfo.ArmorStatus)
+    fmt.Println("Next Bot")
+    c.NextBotInfo.Print()
 
-    fmt.Println("Match status: ", c.MatchStatus)
+    fmt.Println("Match status:", c.MatchStatus)
 }

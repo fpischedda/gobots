@@ -14,6 +14,11 @@ func max(a, b int) int {
     return b
 }
 
+func gain(src, max_val, perc int) int {
+
+    return min(max_val, src+max_val*perc/100)
+}
+
 type Bot struct{
 
     Name string
@@ -30,8 +35,8 @@ type Bot struct{
 
 func (b *Bot) Rest() {
 
-    b.Energy = min(b.MaxEnergy, b.Energy + b.MaxEnergy*b.RestPerc/100)
-    b.Defense = min(b.MaxDefense, b.Defense + b.MaxDefense*b.RestPerc/100)
+    b.Energy = gain(b.Energy, b.MaxEnergy, b.RestPerc)
+    b.Defense = gain(b.Defense, b.MaxDefense, b.RestPerc)
     b.MountedArmor.Repair(50)
 }
 
@@ -59,36 +64,36 @@ func (b *Bot) CurrentMove() *Move {
 type Armor struct {
 
     Name string
+    MaxResistance int
     Resistance int
-    Damage int
 }
 
 func (a *Armor) Repair(repair_perc int) {
 
-    a.Damage = max(0, a.Damage - a.Resistance*repair_perc / 100)
+    a.Resistance = gain(a.Resistance, a.MaxResistance, repair_perc)
 }
 
 func (a *Armor) Status() int {
 
-    return (a.Resistance - a.Damage) * 100 / a.Resistance
+    return a.Resistance * 100 / a.MaxResistance
 }
 
 func (a *Armor) Hit(move *Move) int {
 
-    a.Damage += move.HitDamage
+    a.Resistance -= move.HitDamage
 
-    real_damage := 0
-    if a.Damage > a.Resistance {
-        real_damage = a.Damage - a.Resistance
-        a.Damage = a.Resistance
+    damage := 0
+    if a.Resistance < 0 {
+        damage = -a.Resistance
+        a.Resistance = 0
     }
 
-    return real_damage
+    return damage
 }
 
 func (a *Armor) DefensePoints() int {
 
-    return a.Resistance - a.Damage
+    return a.Resistance
 }
 
 type Move struct{

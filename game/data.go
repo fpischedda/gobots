@@ -31,13 +31,13 @@ func RandomizeBot(armors []gobots.Armor, moves []*gobots.Move,
 var Armors = []gobots.Armor{
     gobots.Armor{
         Name: "Base armor",
+        MaxResistance: 10,
         Resistance: 10,
-        Damage: 0,
     },
     gobots.Armor{
         Name: "Advanced armor",
+        MaxResistance: 30,
         Resistance: 30,
-        Damage: 0,
     },
 }
 

@@ -14,26 +14,25 @@ type PowerUpItem struct {
 
     Name string
     status string
-    Owner *Bot
     DurationInTurns int
-    TurnsLeft int
-    TurnsToRecharge int
+    turns_left int
+    turns_to_recharge int
     RechargeInTurns int
 }
 
-func (p *PowerUpItem) Activate() {
+func (p PowerUpItem) Activate() {
 
     p.status = "activated"
-    p.TurnsLeft = p.DurationInTurns
+    p.turns_left = p.DurationInTurns
 }
 
-func (p *PowerUpItem) on_activate(t *Turn) {
+func (p PowerUpItem) on_activate(t *Turn) {
 }
 
-func (p *PowerUpItem) on_run(t *Turn) {
+func (p PowerUpItem) on_run(t *Turn) {
 }
 
-func (p *PowerUpItem) on_clean(t *Turn) {
+func (p PowerUpItem) on_clean(t *Turn) {
 }
 
 /*
@@ -43,7 +42,7 @@ func (p *PowerUpItem) on_clean(t *Turn) {
  - running
  - recharging
 */
-func (p *PowerUpItem) Update(t *Turn) {
+func (p PowerUpItem) Update(t *Turn) {
 
     switch p.status {
 
@@ -54,20 +53,20 @@ func (p *PowerUpItem) Update(t *Turn) {
     case "running":
         p.on_run(t)
 
-        p.TurnsLeft -= 1
+        p.turns_left -= 1
 
-        if p.TurnsLeft <= 0 {
+        if p.turns_left <= 0 {
 
             p.status = "recharging"
-            p.TurnsToRecharge = p.RechargeInTurns
+            p.turns_to_recharge = p.RechargeInTurns
             p.on_clean(t)
         }
         break;
 
     case "recharging":
-        p.TurnsToRecharge -= 1
+        p.turns_to_recharge -= 1
 
-        if p.TurnsToRecharge <= 0 {
+        if p.turns_to_recharge <= 0 {
 
             p.status = "available"
         }
@@ -78,22 +77,28 @@ func (p *PowerUpItem) Update(t *Turn) {
 type PowerUp_DoubleDefense struct {
     PowerUpItem
     original int
+    applyed_to_bot *Bot
 }
 
-func (p *PowerUp_DoubleDefense) on_activate(t *Turn) {
+func (p PowerUp_DoubleDefense) on_activate(t *Turn) {
 
-    p.original = p.Owner.Defense
-    p.Owner.Defense *= 2
+    b := t.CurrentBot
+    p.original = b.Defense
+    p.applyed_to_bot = b
+    b.Defense *= 2
 }
 
-func (p *PowerUp_DoubleDefense) on_clean(t *Turn) {
+func (p PowerUp_DoubleDefense) on_clean(t *Turn) {
 
-    p.Owner.Defense = p.original
+    p.applyed_to_bot.Defense -= p.original
 }
 
-type PowerUp_HalveAttack PowerUpItem
+type PowerUp_HalveAttack struct {
 
-func (p *PowerUp_HalveAttack) on_run(t *Turn) {
+    PowerUpItem
+}
+
+func (p PowerUp_HalveAttack) on_run(t *Turn) {
 
     t.CurrentMove.HitDamage /= 2
 }

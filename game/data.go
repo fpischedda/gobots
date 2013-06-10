@@ -6,15 +6,18 @@ import(
 )
 
 func RandomizeBot(armors []gobots.Armor, moves []*gobots.Move,
+    powerups []gobots.PowerUp,
     name string) *gobots.Bot {
 
-    armor := Armors[rand.Intn(len(Armors)-1)]
+    armor := Armors[rand.Intn(len(armors)-1)]
     energy := 30 + rand.Intn(10)
     strength := 10 + rand.Intn(5)
     defense := 5 + rand.Intn(5)
     speed := 1 + rand.Intn(5)
     rest_perc := 30 + rand.Intn(30)
-    return &gobots.Bot{
+    powerup := powerups[rand.Intn(len(powerups))]
+
+    bot := &gobots.Bot{
         Name: name,
         MaxEnergy: energy,
         Energy: energy,
@@ -25,7 +28,10 @@ func RandomizeBot(armors []gobots.Armor, moves []*gobots.Move,
         Speed: speed,
         RestPerc: rest_perc,
         Moves: moves,
+        PowerUps: []gobots.PowerUp { powerup },
     }
+
+    return bot
 }
 
 var Armors = []gobots.Armor{
@@ -57,5 +63,24 @@ var Moves = []*gobots.Move{
         Protection: 0,
         TurnsToRecharge: 0,
         MovesByTurn: 2,
+    },
+}
+
+var PowerUps = []gobots.PowerUp {
+
+    gobots.PowerUp_DoubleDefense {
+        PowerUpItem: gobots.PowerUpItem{
+            Name: "Double Defense",
+            DurationInTurns: 1,
+            RechargeInTurns: 3,
+        },
+    },
+
+    gobots.PowerUp_HalveAttack {
+        gobots.PowerUpItem{
+            Name: "Halve Attack",
+            DurationInTurns: 1,
+            RechargeInTurns: 3,
+        },
     },
 }

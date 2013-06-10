@@ -8,13 +8,13 @@ import (
 func main() {
 
     var chronicle = make(chan GameChronicle)
-    bot1 := RandomizeBot(Armors, Moves, "ciccio bot")
-    bot2 := RandomizeBot(Armors, Moves, "pinottobot")
+    bot1 := RandomizeBot(Armors, Moves, PowerUps, "ciccio bot")
+    bot2 := RandomizeBot(Armors, Moves, PowerUps, "pinottobot")
     f := gobots.NewFight(bot1, bot2, 2, 10)
     c := NewChronicle(f, "starting match", 0)
     fmt.Println("*** STARTING FIGHT ***")
     c.Print()
-    
+
     go game_loop(f, chronicle)
 
     for c = <-chronicle; c.MatchStatus == "running"; c = <-chronicle{
@@ -32,7 +32,8 @@ func game_loop(f *gobots.Fight, chronicle chan GameChronicle) {
     for {
 
         damage := f.NextBot.Energy
-        status := f.PlayTurn()
+        t := f.ComputeTurn()
+        status := f.PlayTurn(t)
         damage = damage - f.NextBot.Energy
 
         if status <= 0 {

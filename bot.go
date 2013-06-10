@@ -31,6 +31,7 @@ type Bot struct{
     Speed int
     RestPerc int
     Moves []*Move
+    PowerUps []*PowerUpItem
 }
 
 func (b *Bot) Rest() {

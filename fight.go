@@ -38,9 +38,32 @@ func (f *Fight) CurrentBotMove() *Move {
     return f.CurrentBot.CurrentMove()
 }
 
-func (f *Fight) PlayTurn() int {
+func (f *Fight) ComputeTurn() *Turn {
 
-    move := f.CurrentBotMove()
+    t := &Turn {
+        Round: f.Round,
+        Turn: f.Turn,
+        CurrentBot: f.CurrentBot,
+        NextBot: f.NextBot,
+        CurrentMove: *f.CurrentBotMove(),
+    }
+
+    for _, p := range f.CurrentBot.PowerUps {
+
+        p.Update(t)
+    }
+
+    for _, p := range f.NextBot.PowerUps {
+
+        p.Update(t)
+    }
+
+    return t
+}
+
+func (f *Fight) PlayTurn(t *Turn) int {
+
+    move := &t.CurrentMove
 
     last_res := 0
     for i := 0; i < move.MovesByTurn; i++ {
@@ -74,20 +97,23 @@ func (f *Fight) NextTurn() (*Bot, error) {
         }
     }
 
-    tmp := f.CurrentBot
-    f.CurrentBot = f.NextBot
-    f.NextBot = tmp
+    f.CurrentBot, f.NextBot = f.NextBot, f.CurrentBot
 
     return nil, nil
 }
 
+/*
+ An example game loop implementation
+*/
 func (f *Fight) Loop() *Bot {
 
     var winner *Bot = nil
     var err error
     for winner == nil {
 
-        if f.PlayTurn() <= 0 {
+        t := f.ComputeTurn()
+
+        if f.PlayTurn(t) <= 0 {
             return f.CurrentBot
         } else {
             winner, err = f.NextTurn()

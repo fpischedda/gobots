@@ -1,0 +1,2 @@
+This software is provided with the gplv3 license
+http://www.gnu.org/licenses/gpl-3.0.txt
